@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/main",
     "pages/logs/main",
-    "pages/counter/main"
+    "pages/counter/main",
+    "pages/find/main",
+    "pages/user/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -26,6 +28,16 @@
       "pagePath": "pages/logs/main",
       "iconPath": "static/tabs/orders.png",
       "selectedIconPath": "static/tabs/orders-active.png"
+    },{
+      "text": "发现",
+      "pagePath": "pages/find/main",
+      "iconPath": "static/tabs/find.png",
+      "selectedIconPath": "static/tabs/find-active.png"
+    }, {
+      "text": "我的",
+      "pagePath": "pages/user/main",
+      "iconPath": "static/tabs/user.png",
+      "selectedIconPath": "static/tabs/user-active.png"
     }],
 
     "items": [{
@@ -38,6 +50,16 @@
       "pagePath": "pages/logs/main",
       "icon": "static/tabs/orders.png",
       "activeIcon": "static/tabs/orders-active.png"
+    },{
+      "text": "发现",
+      "pagePath": "pages/find/main",
+      "iconPath": "static/tabs/find.png",
+      "selectedIconPath": "static/tabs/find-active.png"
+    }, {
+      "text": "我的",
+      "pagePath": "pages/user/main",
+      "iconPath": "static/tabs/user.png",
+      "selectedIconPath": "static/tabs/user-active.png"
     }],
     "position": "bottom"
   }

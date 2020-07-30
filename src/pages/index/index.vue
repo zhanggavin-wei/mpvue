@@ -1,56 +1,74 @@
 <template>
-  <div @click="clickHandle">
-
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <img class="userinfo-avatar" src="/static/images/user.png" background-size="cover" />
-
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
+  <div class="home">
+   <!-- 背景图片 -->
+    <img class="home-bg" :src="img.homeBg">
+    <!-- 搜索框 -->
+    <input type="text" class="home_search" placeholder="搜索">
+    <!-- 筛选按钮组 -->
+    <div class="home-filter">
+      <div>
+        <picker
+          @change="cateChange"
+          :value="curCate"
+          range-key='label'
+          :range="cates">
+            <span v-text='cates[curCate].label'></span>
+            <span>*</span>
+        </picker>
       </div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
 
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
+    <!-- 商品列表 -->
+    <div
+      v-for="item in list"
+      @tap='skipToDetail(item)'
+      :key='item.id' class="home_good">
+      <span v-text='item.name'></span>
+      <span>-</span>
+      <span v-text='item.price'></span>
     </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" :value="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
 
     <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
-
-    <div class="all">
-        <div class="left">
-        </div>
-        <div class="right">
-        </div>
-    </div>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
-
+import img from '@/utils/img'
+import {goods} from '@/utils/data'
 export default {
   data () {
     return {
-      motto: 'Hello miniprograme',
-      userInfo: {
-        nickName: 'mpvue',
-        avatarUrl: 'http://mpvue.com/assets/logo.png'
-      }
+      img,
+      curCate: 0,
+      cates: [
+        { id: 1, label: '手机数码', value: 'a' },
+        { id: 2, label: '母婴产品', value: 'b' },
+        { id: 3, label: '女士服装', value: 'c' },
+        { id: 4, label: '体育用品', value: 'd' }
+      ],
+      list: []
     }
   },
-
-  components: {
-    card
+  onPullDownRefresh () {
+    console.log('下拉刷新')
+    this.list = goods
+    setTimeout(() => {
+      mpvue.stopPullDownRefresh()
+    }, 1500)
   },
 
+  onReachBottom () {
+    // 分页
+    this.list = [...this.list, ...goods]
+  },
+
+  onShow () {
+    // 调接口
+    this.list = goods
+  },
   methods: {
     bindViewTap () {
       const url = '../logs/main'
@@ -63,64 +81,45 @@ export default {
     clickHandle (ev) {
       console.log('clickHandle:', ev)
       // throw {message: 'custom test'}
+    },
+    cateChange (e) {
+      console.log(e.target.value)
+      this.curCate = e.target.value
+    },
+    skipToDetail (item) {
+      mpvue.navigateTo({
+        url: 'detail?id=' + item.id + '&name=' + item.name
+      })
     }
-  },
-
-  created () {
-    // let app = getApp()
   }
 }
 </script>
 
 <style scoped>
-.userinfo {
+.home-bg {
+  width: 100%;
+  height: 528rpx;
+}
+.home-filter {
+  height: 80rpx;
+  line-height: 80rpx;
   display: flex;
-  flex-direction: column;
-  align-items: center;
 }
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+.home-filter>div {
+  flex: 1;
+  border: 1rpx solid #ccc;
 }
-
-.userinfo-nickname {
-  color: #aaa;
+.home_good {
+  line-height: 350rpx;
+  border-bottom: 1rpx solid orange;
 }
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
+.home_search{
+  height: 30rpx;
+  font-size:16px;
+  margin: 20rpx 20rpx;
+  border-radius: 25rpx;
   border: 1px solid #ccc;
-}
-.all{
-  width:7.5rem;
-  height:1rem;
-  background-color:blue;
-}
-.all:after{
-  display:block;
-  content:'';
-  clear:both;
-}
-.left{
-  float:left;
-  width:3rem;
-  height:1rem;
-  background-color:red;
-}
-
-.right{
-  float:left;
-  width:4.5rem;
-  height:1rem;
-  background-color:green;
+  padding-left:10rpx;
+  background: #eeeeee;
 }
 </style>
